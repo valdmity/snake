@@ -17,10 +17,9 @@ class View:
                                           MapCell.wall: pygame.Color("gray")}
 
     def update(self):
-        self.fill(pygame.Color("black"))
+        pygame.display.flip()
         game_map = self.game_engine.map
         width, height = self.size
-        pygame.display.flip()
         for w in range(width):
             for h in range(height):
                 point = game_map[h][w]
