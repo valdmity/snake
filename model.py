@@ -2,6 +2,7 @@ from objects.snake import *
 from objects.vector import *
 from objects.map_parser import *
 import time
+import pygame
 
 # noinspection PyTypeChecker
 sym_by_direction = dict([[vector_zero, '*'],
@@ -37,7 +38,7 @@ class GameEngine:
             x, y = upd[0].x, upd[0].y
             self.map[y][x] = upd[1]
 
-    def draw(self, dir_flag):
+    def draw(self, dir_flag = False):
         output = [[' '] * self.map_size[0] for _ in range(self.map_size[1])]
         for y in range(self.map_size[1]):
             for x in range(self.map_size[0]):
@@ -54,7 +55,8 @@ class GameEngine:
 
     def run(self):
         while True:
+            pygame.time.delay(200)
             self.update()
-            time.sleep(0.2)
+            pygame.time.delay(200)
             self.view.update()
-            time.sleep(0.2)
+            self.draw()

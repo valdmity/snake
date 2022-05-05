@@ -16,7 +16,7 @@ class Snake:
         self.map = level.map
         self.head = self.tail = None
         self.create_snake(head_pos)
-        self.new_head_dir = vector_zero
+        self.new_head_dir = vector_right
         self.size = 2
 
     def create_snake(self, head_pos):

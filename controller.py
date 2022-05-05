@@ -20,4 +20,4 @@ class Controller:
                     self.game_engine.snake.change_dir(vector_left)
                 elif event.type == pygame.K_e:
                     self.game_engine.snake.eat()
-            time.sleep(0.01)
+            pygame.time.delay(10)

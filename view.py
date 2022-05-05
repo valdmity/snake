@@ -17,10 +17,9 @@ class View:
                                           MapCell.wall: pygame.Color("gray")}
 
     def update(self):
-        self.fill(pygame.Color("black"))
         game_map = self.game_engine.map
         width, height = self.size
-        pygame.display.flip()
+        # pygame.display.flip()
         for w in range(width):
             for h in range(height):
                 point = game_map[h][w]
@@ -72,3 +71,4 @@ class View:
         :param scale: размер клеток (10 пикс. по дефолту)
         """
         pygame.draw.rect(surface, color, [pos[0] * scale, pos[1] * scale, scale, scale])
+
