@@ -1,27 +1,23 @@
 import time
-import keyboard
+import pygame
 from objects.vector import *
 
 
 class Controller:
     def __init__(self, game_engine):
         self.game_engine = game_engine
-        print('aboba')
 
     def run(self):
         while True:
-            try:
-                if keyboard.is_pressed('w'):
+            for event in pygame.event.get():
+                if event.type == pygame.K_w:
                     self.game_engine.snake.change_dir(vector_down)
-                if keyboard.is_pressed('s'):
+                elif event.type == pygame.K_s:
                     self.game_engine.snake.change_dir(vector_up)
-                if keyboard.is_pressed('d'):
+                elif event.type == pygame.K_d:
                     self.game_engine.snake.change_dir(vector_right)
-                if keyboard.is_pressed('a'):
+                elif event.type == pygame.K_a:
                     self.game_engine.snake.change_dir(vector_left)
-                if keyboard.is_pressed('e'):
+                elif event.type == pygame.K_e:
                     self.game_engine.snake.eat()
-                    time.sleep(0.1)
-                time.sleep(0.05)
-            except():
-                pass
+            time.sleep(0.01)

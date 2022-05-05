@@ -56,4 +56,5 @@ class GameEngine:
         while True:
             self.update()
             time.sleep(0.2)
-            self.draw(dir_flag=False)
+            self.view.update()
+            time.sleep(0.2)
