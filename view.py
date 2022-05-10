@@ -8,12 +8,12 @@ class View:
         self.surface = self.set_mode(game_engine.map_size)
         self.game_engine = game_engine
         self.game_engine.view = self
-        self.dict_colors_by_point_type = {MapCell.snake_tail: pygame.Color("green"),
-                                          MapCell.snake_body: pygame.Color("green"),
-                                          MapCell.snake_head: pygame.Color("green"),
-                                          MapCell.snake_pre_tail: pygame.Color("green"),
-                                          MapCell.food: pygame.Color("red"),
-                                          MapCell.wall: pygame.Color("gray")}
+        self.dict_colors_by_point_type = {MapCell.snake_tail: pygame.Color("#4caf50"),
+                                          MapCell.snake_pre_tail: pygame.Color("#43a047"),
+                                          MapCell.snake_body: pygame.Color("#388e3c"),
+                                          MapCell.snake_head: pygame.Color("#2e7d32"),
+                                          MapCell.food: pygame.Color("#e91e63"),
+                                          MapCell.wall: pygame.Color("#455a64")}
 
     def update(self):
         pygame.display.flip()
@@ -27,10 +27,10 @@ class View:
                                     pos)
                 else:
                     self.draw_point(self.surface,
-                                    pygame.Color("black"),
+                                    pygame.Color("#263238"),
                                     pos)
         for seg in self.game_engine.snake.get_segmets():
-            pos = [seg.pos.x, seg.pos.y]
+            pos = [seg.pos.y, seg.pos.x]
             self.draw_point(self.surface,
                             self.dict_colors_by_point_type[seg.segment_type],
                             pos)
@@ -73,5 +73,5 @@ class View:
         :param pos: координаты клетки
         :param scale: размер клеток (10 пикс. по дефолту)
         """
-        pygame.draw.rect(surface, color, [pos[0] * scale, pos[1] * scale, scale, scale])
+        pygame.draw.rect(surface, color, [pos[1] * scale, pos[0] * scale, scale, scale])
 

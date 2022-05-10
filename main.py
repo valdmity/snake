@@ -23,5 +23,5 @@ if __name__ == '__main__':
             elif event.type == pygame.QUIT:
                 game_engine.stop_flag = stop_flag = True
                 break
-    pygame.time.delay(1000)
+    pygame.time.delay(400)
     pygame.quit()
