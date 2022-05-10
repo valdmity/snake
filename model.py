@@ -38,7 +38,7 @@ class GameEngine:
             x, y = upd[0].x, upd[0].y
             self.map[y][x] = upd[1]
 
-    def draw(self, dir_flag = False):
+    def draw(self, dir_flag=False):
         output = [[' '] * self.map_size[0] for _ in range(self.map_size[1])]
         for y in range(self.map_size[1]):
             for x in range(self.map_size[0]):

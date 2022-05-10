@@ -4,7 +4,7 @@ from objects.map_cell import MapCell
 
 class View:
     def __init__(self, game_engine):
-        pygame.init()
+        # pygame.init()
         self.size = game_engine.map_size
         self.surface = self.set_mode(self.size)
         self.game_engine = game_engine
@@ -19,7 +19,7 @@ class View:
     def update(self):
         game_map = self.game_engine.map
         width, height = self.size
-        # pygame.display.flip()
+        pygame.display.flip()
         for w in range(width):
             for h in range(height):
                 point = game_map[h][w]

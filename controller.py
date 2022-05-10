@@ -1,3 +1,4 @@
+'''
 import time
 import pygame
 from objects.vector import *
@@ -21,3 +22,4 @@ class Controller:
                 elif event.type == pygame.K_e:
                     self.game_engine.snake.eat()
             pygame.time.delay(10)
+'''
