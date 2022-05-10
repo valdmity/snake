@@ -29,6 +29,7 @@ class GameEngine:
         self.update_map([[Vector(3, 3), MapCell.food]])
         self.snake = Snake(self, Vector(1, 1))
         self.view = None
+        self.stop_flag = False
 
     def update(self):
         self.snake.move()
@@ -54,9 +55,9 @@ class GameEngine:
         print(fin_output)
 
     def run(self):
-        while True:
-            pygame.time.delay(200)
+        while not self.stop_flag:
+            pygame.time.delay(100)
             self.update()
-            pygame.time.delay(200)
+            pygame.time.delay(100)
             self.view.update()
             self.draw()

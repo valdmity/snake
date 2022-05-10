@@ -4,9 +4,8 @@ from objects.map_cell import MapCell
 
 class View:
     def __init__(self, game_engine):
-        # pygame.init()
-        self.size = game_engine.map_size
-        self.surface = self.set_mode(self.size)
+        self.map_width, self.map_height = game_engine.map_size
+        self.surface = self.set_mode(game_engine.map_size)
         self.game_engine = game_engine
         self.game_engine.view = self
         self.dict_colors_by_point_type = {MapCell.snake_tail: pygame.Color("green"),
@@ -17,12 +16,10 @@ class View:
                                           MapCell.wall: pygame.Color("gray")}
 
     def update(self):
-        game_map = self.game_engine.map
-        width, height = self.size
         pygame.display.flip()
-        for w in range(width):
-            for h in range(height):
-                point = game_map[h][w]
+        for w in range(self.map_width):
+            for h in range(self.map_height):
+                point = self.game_engine.map[h][w]
                 pos = [h, w]
                 if point in self.dict_colors_by_point_type:
                     self.draw_point(self.surface,
@@ -32,6 +29,12 @@ class View:
                     self.draw_point(self.surface,
                                     pygame.Color("black"),
                                     pos)
+        for seg in self.game_engine.snake.get_segmets():
+            pos = [seg.pos.x, seg.pos.y]
+            self.draw_point(self.surface,
+                            self.dict_colors_by_point_type[seg.segment_type],
+                            pos)
+
         pygame.display.update()
 
     def set_mode(self, size, scale=10):
