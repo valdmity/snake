@@ -5,6 +5,7 @@ from objects.map_cell import MapCell
 class View:
     def __init__(self, game_engine):
         self.map_width, self.map_height = game_engine.map_size
+        self.scale = 25
         self.surface = self.set_mode(game_engine.map_size)
         self.game_engine = game_engine
         self.game_engine.view = self
@@ -42,7 +43,7 @@ class View:
 
         pygame.display.update()
 
-    def set_mode(self, size, scale=10):
+    def set_mode(self, size):
         """
         Создает окно заданного размера
         :param size: размеры окна в клетках
@@ -50,14 +51,14 @@ class View:
         :return: "холст" окна
         """
         border_color = [200, 200, 200]
-        surface = pygame.display.set_mode([size[0] * scale, size[1] * scale])
+        surface = pygame.display.set_mode([size[0] * self.scale, size[1] * self.scale])
         for i in range(0, size[0]):
-            pygame.draw.line(surface, border_color, [i * scale, 0], [i * scale, size[1] * scale])
+            pygame.draw.line(surface, border_color, [i * self.scale, 0], [i * self.scale, size[1] * self.scale])
         for i in range(0, size[1]):
-            pygame.draw.line(surface, border_color, [0, i * scale], [size[0] * scale, i * scale])
+            pygame.draw.line(surface, border_color, [0, i * self.scale], [size[0] * self.scale, i * self.scale])
         return surface
 
-    def fill(self, screen_color, scale=10):
+    def fill(self, screen_color):
         """
         Заливает окно цветом
         :param screen_color: цвет окна
@@ -66,11 +67,11 @@ class View:
         self.surface.fill(screen_color)
         w, h = self.surface.get_size()
         for i in range(0, w):
-            pygame.draw.line(self.surface, [200, 200, 200], [i * scale, 0], [i * scale, h * scale])
+            pygame.draw.line(self.surface, [200, 200, 200], [i * self.scale, 0], [i * self.scale, h * self.scale])
         for i in range(0, h):
-            pygame.draw.line(self.surface, [200, 200, 200], [0, i * scale], [w * scale, i * scale])
+            pygame.draw.line(self.surface, [200, 200, 200], [0, i * self.scale], [w * self.scale, i * self.scale])
 
-    def draw_point(self, surface, color, pos, scale=10):
+    def draw_point(self, surface, color, pos):
         """
         Закрашивает клеточку
         :param surface: поверхность (окно, например)
@@ -78,5 +79,5 @@ class View:
         :param pos: координаты клетки
         :param scale: размер клеток (10 пикс. по дефолту)
         """
-        pygame.draw.rect(surface, color, [pos[1] * scale, pos[0] * scale, scale, scale])
+        pygame.draw.rect(surface, color, [pos[1] * self.scale, pos[0] * self.scale, self.scale, self.scale])
 

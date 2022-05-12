@@ -12,6 +12,7 @@ sym_by_direction = dict([[vector_zero, '*'],
                          [vector_right, '→'],
                          [vector_up, '↓'],
                          [vector_down, '↑']])
+level0 = [' ' * 5] * 5
 level1 = ['                                   ',
           '                        ####       ',
           '                           #       ',
