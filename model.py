@@ -56,8 +56,7 @@ class GameEngine:
 
     def run(self):
         while not self.stop_flag:
-            pygame.time.delay(50)
+            pygame.time.delay(100)
             self.update()
-            pygame.time.delay(50)
             self.view.update()
             # self.draw() # debug
