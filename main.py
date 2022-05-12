@@ -19,9 +19,12 @@ if __name__ == '__main__':
     while not stop_flag:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                controller.handle_event(event.key)
+                controller.handle_keydown(event.key)
+            elif event.type == pygame.KEYUP:
+                controller.handle_keyup(event.key)
             elif event.type == pygame.QUIT:
                 game_engine.stop_flag = stop_flag = True
                 break
+        controller.handle_key()
     pygame.time.delay(400)
     pygame.quit()
