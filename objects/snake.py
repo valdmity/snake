@@ -11,13 +11,15 @@ class SnakeSegment:
 
 
 class Snake:
-    def __init__(self, level, head_pos):
-        self.level = level
-        self.map = level.map
+    def __init__(self, game_engine, head_pos):
+        self.game_engine = game_engine
+        self.map = game_engine.map
         self.head = self.tail = None
         self.create_snake(head_pos)
         self.new_head_dir = vector_zero
         self.size = 2
+        self.is_segments_updated = True
+        self.segments = None
 
     def create_snake(self, head_pos):
         self.head = SnakeSegment(head_pos, MapCell.snake_head, vector_zero)
@@ -51,21 +53,25 @@ class Snake:
         self.head.dir = self.new_head_dir
         if self.head.dir == vector_zero:
             return
+
         nxt_p = self.head.pos + self.head.dir
-        if nxt_p.x < 0 or nxt_p.x >= self.level.map_size[0] or nxt_p.y < 0 or nxt_p.y >= self.level.map_size[1]:
-            nxt_p = Vector((nxt_p.x + self.level.map_size[0]) % self.level.map_size[0],
-                           (nxt_p.y + self.level.map_size[1]) % self.level.map_size[1])
+        if nxt_p.x < 0 or nxt_p.x >= self.game_engine.map_size[0] or nxt_p.y < 0 or nxt_p.y >= self.game_engine.map_size[1]:
+            nxt_p = Vector((nxt_p.x + self.game_engine.map_size[0]) % self.game_engine.map_size[0],
+                           (nxt_p.y + self.game_engine.map_size[1]) % self.game_engine.map_size[1])
 
         self.check_mapcell(nxt_p)
 
         self.move_tail(self.tail.next_segment)
         self.move_head(SnakeSegment(nxt_p, MapCell.snake_head, self.head.dir))
+        self.is_segments_updated = True
 
-    def eat(self):
+    def eat(self, spawn_food_after_eat=True):
         old_tail = self.tail
         self.tail = SnakeSegment(old_tail.pos, MapCell.snake_tail, self.tail.dir, old_tail)
         old_tail.segment_type = MapCell.snake_pre_tail
         self.size += 1
+        if spawn_food_after_eat:
+            self.game_engine.spawn_food()
 
     def get_segment_by_pos(self, pos):
         for s in self.get_segmets():
@@ -74,11 +80,15 @@ class Snake:
         return None
 
     def get_segmets(self):
+        if not self.is_segments_updated:
+            return self.segments
         segments_pos = []
         cur_segment = self.tail
         while cur_segment is not None:
             segments_pos.append(cur_segment)
             cur_segment = cur_segment.next_segment
+        self.is_segments_updated = False
+        self.segments = segments_pos
         return segments_pos
 
     def change_dir(self, new_dir):

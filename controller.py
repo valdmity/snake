@@ -22,9 +22,7 @@ class Controller:
                 self.game_engine.snake.change_dir(vector_left)
             elif key == pygame.K_e and time.time() - self.last_eat > 0.1:
                 self.last_eat = time.time()
-                self.game_engine.snake.eat()
-            elif key == pygame.K_p:
-                print("pygame залупа")
+                self.game_engine.spawn_food()
 
     def handle_keydown(self, key):
         self.pressed_keys.add(key)
