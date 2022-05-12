@@ -13,15 +13,18 @@ sym_by_direction = dict([[vector_zero, '*'],
                          [vector_up, '↓'],
                          [vector_down, '↑']])
 level1 = ['                                   ',
+          '                        ####       ',
+          '                           #       ',
+          '                           #       ',
           '                                   ',
-          '                         #         ',
-          '         $               ##        ',
-          '                           ###     ',
           '                                   ',
-          '        #                          ',
-          '##     ###               #####     ',
-          '        #                  #       ',
-          '                              #    ']
+          '                       #           ',
+          '                      ###          ',
+          '                       #           ',
+          '               ###                 ',
+          '       #       ##                  ',
+          '      ####                         ',
+          '                                   ']
 
 
 class GameEngine:
@@ -31,12 +34,14 @@ class GameEngine:
         self.snake = Snake(self, Vector(1, 1))
         self.view = None
         self.stop_flag = False
-        self.move_delay = 150
         self.empty_cells = set()
         for x in range(self.map_size[0]):
             for y in range(self.map_size[1]):
                 if self.map[y][x] == MapCell.empty:
                     self.empty_cells.add(Vector(x, y))
+        self.spawn_food()
+        self.spawn_food()
+        self.spawn_food()
 
     def update(self):
         self.snake.move()
@@ -69,11 +74,16 @@ class GameEngine:
         available_cells = self.empty_cells - not_available_cells
         if self.empty_cells:
             spawn_pos = list(available_cells)[random.randrange(0, len(available_cells))]
-            self.map[spawn_pos.y][spawn_pos.x] = MapCell.food
+            self.map[spawn_pos.y][spawn_pos.x] = [MapCell.food,
+                                                  MapCell.food,
+                                                  MapCell.food,
+                                                  MapCell.food,
+                                                  MapCell.speed_food,
+                                                  MapCell.neg_speed_food][random.randrange(0, 6)]
 
     def run(self):
         while not self.stop_flag:
-            pygame.time.delay(self.move_delay)
+            pygame.time.delay(self.snake.move_delays[self.snake.move_delay_index])
             self.update()
             self.view.update()
             # self.draw() # debug

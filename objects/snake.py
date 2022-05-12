@@ -1,3 +1,4 @@
+import model
 from objects.map_cell import *
 from objects.vector import *
 
@@ -15,16 +16,21 @@ class Snake:
         self.game_engine = game_engine
         self.map = game_engine.map
         self.head = self.tail = None
-        self.create_snake(head_pos)
         self.new_head_dir = vector_zero
-        self.size = 2
+        self.health = 3
+        self.move_delays = [40, 45, 50, 60, 70, 80, 100, 150, 200, 250, 350]
+        self.move_delay_index = 8
         self.is_segments_updated = True
         self.segments = None
+        self.create_snake(head_pos)
 
     def create_snake(self, head_pos):
         self.head = SnakeSegment(head_pos, MapCell.snake_head, vector_zero)
         pre_tail = SnakeSegment(head_pos, MapCell.snake_pre_tail, vector_zero, self.head)
         self.tail = SnakeSegment(head_pos, MapCell.snake_tail, vector_zero, pre_tail)
+        self.move_delay_index = 8
+        self.is_segments_updated = True
+        self.segments = None
 
     def move_tail(self, new_tail):
         self.tail = new_tail
@@ -42,8 +48,17 @@ class Snake:
             self.map[pos.y][pos.x] = MapCell.empty
             self.eat()
             return
+        if self.map[pos.y][pos.x] == MapCell.speed_food:
+            self.move_delay_index -= 1 if self.move_delay_index > 0 else 0
+            self.map[pos.y][pos.x] = MapCell.empty
+            self.eat()
+        if self.map[pos.y][pos.x] == MapCell.neg_speed_food:
+            self.move_delay_index += 1 if self.move_delay_index < len(self.move_delays) - 1 else 0
+            self.map[pos.y][pos.x] = MapCell.empty
+            self.eat()
         if self.map[pos.y][pos.x] == MapCell.wall:
             self.create_snake(pos)
+            self.health -= 1
             return
         ssegment = self.get_segment_by_pos(pos)
         if ssegment is not None and ssegment.segment_type in [MapCell.snake_body, MapCell.snake_pre_tail]:
@@ -65,12 +80,11 @@ class Snake:
         self.move_head(SnakeSegment(nxt_p, MapCell.snake_head, self.head.dir))
         self.is_segments_updated = True
 
-    def eat(self, spawn_food_after_eat=True):
+    def eat(self, grow_food_after_eat=True):
         old_tail = self.tail
         self.tail = SnakeSegment(old_tail.pos, MapCell.snake_tail, self.tail.dir, old_tail)
         old_tail.segment_type = MapCell.snake_pre_tail
-        self.size += 1
-        if spawn_food_after_eat:
+        if grow_food_after_eat:
             self.game_engine.spawn_food()
 
     def get_segment_by_pos(self, pos):

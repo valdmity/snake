@@ -13,7 +13,12 @@ class View:
                                           MapCell.snake_body: pygame.Color("#388e3c"),
                                           MapCell.snake_head: pygame.Color("#2e7d32"),
                                           MapCell.food: pygame.Color("#e91e63"),
-                                          MapCell.wall: pygame.Color("#455a64")}
+                                          MapCell.wall: pygame.Color("#455a64"),
+                                          MapCell.speed_food: pygame.Color("#00bcd4"),
+                                          MapCell.neg_speed_food: pygame.Color("#e57373")}
+        pygame.display.set_caption("snake ^.^")
+        pygame.display.set_icon(pygame.image.load("snake.png"))
+
 
     def update(self):
         # pygame.display.flip()
