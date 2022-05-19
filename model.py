@@ -35,6 +35,7 @@ class GameEngine:
         self.snake = Snake(self, Vector(1, 1))
         self.view = None
         self.stop_flag = False
+        self.pause_flag = False
         self.empty_cells = set()
         for x in range(self.map_size[0]):
             for y in range(self.map_size[1]):
@@ -84,7 +85,10 @@ class GameEngine:
 
     def run(self):
         while not self.stop_flag:
-            pygame.time.delay(self.snake.move_delays[self.snake.move_delay_index])
-            self.update()
-            self.view.update()
-            # self.draw() # debug
+            if not self.pause_flag:
+                pygame.time.delay(self.snake.move_delays[self.snake.move_delay_index])
+                self.update()
+                self.view.update()
+                # self.draw() # debug
+        if self.snake.health <= 0:
+            self.view.game_over()

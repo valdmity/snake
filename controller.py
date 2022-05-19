@@ -22,9 +22,12 @@ class Controller:
             elif key == pygame.K_e and time.time() - self.last_eat > 0.1:
                 self.last_eat = time.time()
                 self.game_engine.spawn_food()
+            elif key == pygame.K_ESCAPE and time.time() - self.last_eat > 1:
+                self.game_engine.pause_flag = not self.game_engine.pause_flag
+                self.last_eat = time.time()
 
-    def handle_keydown(self, key):
+    def handle_key_down(self, key):
         self.pressed_keys.add(key)
 
-    def handle_keyup(self, key):
+    def handle_key_up(self, key):
         self.pressed_keys.remove(key)

@@ -18,9 +18,11 @@ class Snake:
         self.head = self.tail = None
         self.new_head_dir = vector_zero
         self.health = 3
+        self.points = 0
+        self.is_new_snake = True
         self.move_delays = [40, 45, 50, 60, 70, 80, 100, 150, 200, 250, 350]
         self.move_delay_index = 8
-        self.is_segments_updated = True
+        self.is_segments_updated = False
         self.segments = None
         self.create_snake(head_pos)
 
@@ -31,6 +33,7 @@ class Snake:
         self.move_delay_index = 8
         self.is_segments_updated = True
         self.segments = None
+        self.game_engine.points = 0
 
     def move_tail(self, new_tail):
         self.tail = new_tail
@@ -47,33 +50,38 @@ class Snake:
         if self.map[pos.y][pos.x] == MapCell.food:
             self.map[pos.y][pos.x] = MapCell.empty
             self.eat()
+            self.points += 10
             return
         if self.map[pos.y][pos.x] == MapCell.speed_food:
             self.move_delay_index -= 1 if self.move_delay_index > 0 else 0
             self.map[pos.y][pos.x] = MapCell.empty
             self.eat()
+            self.points += 5
         if self.map[pos.y][pos.x] == MapCell.neg_speed_food:
             self.move_delay_index += 1 if self.move_delay_index < len(self.move_delays) - 1 else 0
             self.map[pos.y][pos.x] = MapCell.empty
             self.eat()
         if self.map[pos.y][pos.x] == MapCell.wall:
             self.create_snake(pos)
-            self.health -= 1
+            self.change_health()
             return
-        ssegment = self.get_segment_by_pos(pos)
-        if ssegment is not None and ssegment.segment_type in [MapCell.snake_body, MapCell.snake_pre_tail]:
-            self.move_tail(ssegment)
+        segment = self.get_segment_by_pos(pos)
+        if segment is not None and segment.segment_type in [MapCell.snake_body, MapCell.snake_pre_tail]:
+            self.move_tail(segment)
+
+    def change_health(self):
+        self.health -= 1
+        if self.health <= 0:
+            self.game_engine.stop_flag = True
 
     def move(self):
         self.head.dir = self.new_head_dir
         if self.head.dir == vector_zero:
             return
-
         nxt_p = self.head.pos + self.head.dir
         if nxt_p.x < 0 or nxt_p.x >= self.game_engine.map_size[0] or nxt_p.y < 0 or nxt_p.y >= self.game_engine.map_size[1]:
             nxt_p = Vector((nxt_p.x + self.game_engine.map_size[0]) % self.game_engine.map_size[0],
                            (nxt_p.y + self.game_engine.map_size[1]) % self.game_engine.map_size[1])
-
         self.check_mapcell(nxt_p)
 
         self.move_tail(self.tail.next_segment)
